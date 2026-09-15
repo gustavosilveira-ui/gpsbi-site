@@ -993,14 +993,14 @@ function sigBuildHTML(name, role, phoneFmt, waDigits) {
 }
 
 function sigOpenArea(area) {
-  const ids = ['sigHome','sigInternalArea','sigClientsArea','sigClientTangram','sigClientAnker,'sigClientEmpoderamento','sigClientMisterwiz','sigClientJambuzada'];
+  const ids = ['sigHome','sigInternalArea','sigClientsArea','sigClientTangram','sigClientAnker','sigClientEmpoderamento','sigClientMisterwiz','sigClientJambuzada'];
   ids.forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
   const target = area === 'internal' ? 'sigInternalArea' : 'sigClientsArea';
   const el=document.getElementById(target); if(el) el.style.display='block';
   if(area === 'clients') { const q=document.getElementById('sigClientSearch'); if(q) setTimeout(()=>q.focus(),50); }
 }
 function sigBackHome() {
-  ['sigInternalArea','sigClientsArea','sigClientTangram','sigClientAnker,'sigClientEmpoderamento','sigClientMisterwiz','sigClientJambuzada'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  ['sigInternalArea','sigClientsArea','sigClientTangram','sigClientAnker','sigClientEmpoderamento','sigClientMisterwiz','sigClientJambuzada'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
   const h=document.getElementById('sigHome'); if(h) h.style.display='grid';
 }
 function sigFilterClients() {
@@ -1011,7 +1011,7 @@ function sigFilterClients() {
 }
 function sigOpenClient(client) {
   if(!['tangram','anker','empoderamento','misterwiz','jambuzada'].includes(client)) return;
-  ['sigHome','sigInternalArea','sigClientsArea','sigClientTangram','sigClientAnker,'sigClientEmpoderamento','sigClientMisterwiz','sigClientJambuzada'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  ['sigHome','sigInternalArea','sigClientsArea','sigClientTangram','sigClientAnker','sigClientEmpoderamento','sigClientMisterwiz','sigClientJambuzada'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
   const target = ({tangram:'sigClientTangram',anker:'sigClientAnker',empoderamento:'sigClientEmpoderamento',misterwiz:'sigClientMisterwiz',jambuzada:'sigClientJambuzada'})[client];
   const el=document.getElementById(target); if(el) el.style.display='block';
 }
