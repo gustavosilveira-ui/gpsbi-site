@@ -157,11 +157,16 @@ h2{font-size:46px;line-height:1.02;letter-spacing:-.06em;margin-bottom:16px;text
 <body>
 <script>
 (function(){
+  const LIVRO_CONVIDADOS = ['ed3a50b5853f232e5e779146ed043c583fef0a56af0406a785bef047c84872e9'];
+  async function livroHash(t){ const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)); return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join(''); }
+  async function livroAutorizado(email){ if((email.split('@')[1]||'') === 'gpsbi.com.br') return true; try { return LIVRO_CONVIDADOS.indexOf(await livroHash(email)) > -1; } catch(e){ return false; } }
   const email = (sessionStorage.getItem('gpsbi_founder_access') || '').trim().toLowerCase();
-  const domain = email.split('@')[1] || '';
-  if(domain !== 'gpsbi.com.br'){
+  if((email.split('@')[1] || '') !== 'gpsbi.com.br'){
     document.documentElement.style.visibility = 'hidden';
-    window.location.replace('index.html#livro-fundador');
+    livroAutorizado(email).then(function(ok){
+      if(ok) document.documentElement.style.visibility = '';
+      else window.location.replace('index.html#livro-fundador');
+    });
   }
 })();
 </script>

@@ -616,7 +616,10 @@ function openUniversoGPSBI(event) {
   overlay.addEventListener('click', e=>{ if(e.target === overlay) closeAccess(); });
   document.addEventListener('keydown', e=>{ if(e.key === 'Escape' && overlay.classList.contains('open')) closeAccess(); });
 
-  form.addEventListener('submit', e=>{
+  const LIVRO_CONVIDADOS = ['ed3a50b5853f232e5e779146ed043c583fef0a56af0406a785bef047c84872e9'];
+  async function livroHash(t){ const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)); return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join(''); }
+  async function livroAutorizado(email){ if((email.split('@')[1]||'') === 'gpsbi.com.br') return true; try { return LIVRO_CONVIDADOS.indexOf(await livroHash(email)) > -1; } catch(e){ return false; } }
+  form.addEventListener('submit', async e=>{
     e.preventDefault();
     const email = input.value.trim().toLowerCase();
     const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -626,8 +629,7 @@ function openUniversoGPSBI(event) {
       return;
     }
 
-    const domain = email.split('@')[1] || '';
-    if(domain === 'gpsbi.com.br'){
+    if(await livroAutorizado(email)){
       sessionStorage.setItem('gpsbi_founder_access', email);
       msg.className = 'founder-access-msg success';
       msg.textContent = 'Acesso autorizado. Abrindo o Livro do Fundador…';
