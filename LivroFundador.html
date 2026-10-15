@@ -206,7 +206,7 @@ h2{font-size:46px;line-height:1.02;letter-spacing:-.06em;margin-bottom:16px;text
 <div class="layout">
 <aside>
 <h3>Índice</h3>
-<nav><a href="#carta-fundador"><span>00</span>Carta do Fundador</a><a href="#abertura"><span>01</span>Abertura</a><a href="#historia"><span>02</span>Nossa História</a><a href="#porque"><span>03</span>Por que existimos</a><a href="#missao"><span>04</span>Missão, Visão e Valores</a><a href="#manifesto"><span>05</span>O que defendemos</a><a href="#marca"><span>06</span>Marca e Identidade Visual</a><a href="#voz"><span>07</span>Tom de Voz</a><a href="#cultura"><span>08</span>Cultura Gpsbi</a><a href="#pessoas"><span>09</span>RH, Desenvolvimento e Cuidado</a><a href="#cliente"><span>10</span>Cliente Ideal e Experiência</a><a href="#operacao"><span>11</span>Serviços e Forma de Entrega</a><a href="#universo"><span>12</span>O Universo Gpsbi</a><a href="#campus"><span>13</span>Campus Gpsbi</a><a href="#estrategia"><span>14</span>Roadmap da Nova Gpsbi</a><a href="#constituicao"><span>15</span>Constituição Gpsbi</a><a href="#assinatura"><span>16</span>Assinatura de E-mail</a></nav>
+<nav><a href="#carta-fundador"><span>00</span>Carta do Fundador</a><a href="#abertura"><span>01</span>Abertura</a><a href="#historia"><span>02</span>Nossa História</a><a href="#porque"><span>03</span>Por que existimos</a><a href="#missao"><span>04</span>Missão, Visão e Valores</a><a href="#manifesto"><span>05</span>O que defendemos</a><a href="#marca"><span>06</span>Marca e Identidade Visual</a><a href="#voz"><span>07</span>Tom de Voz</a><a href="#cultura"><span>08</span>Cultura Gpsbi</a><a href="#pessoas"><span>09</span>RH, Desenvolvimento e Cuidado</a><a href="#cliente"><span>10</span>Cliente Ideal e Experiência</a><a href="#operacao"><span>11</span>Serviços e Forma de Entrega</a><a href="#universo"><span>12</span>O Universo Gpsbi</a><a href="#campus"><span>13</span>Campus Gpsbi</a><a href="#estrategia"><span>14</span>Roadmap da Nova Gpsbi</a><a href="#constituicao"><span>15</span>Constituição Gpsbi</a><a href="#assinatura"><span>16</span>Assinatura de E-mail</a><a href="#apresentacoes"><span>17</span>Apresentações Comerciais</a></nav>
 </aside>
 <main>
 <section class="chapter" id="abertura">
@@ -912,6 +912,44 @@ h2{font-size:46px;line-height:1.02;letter-spacing:-.06em;margin-bottom:16px;text
 <div class="sig-status" id="sigJambuzadaStatus"></div>
 </div>
 </div>
+</div>
+</section>
+<section class="chapter" id="apresentacoes">
+<div class="chapter-inner">
+<div class="chapter-number">17</div>
+<div class="chapter-head">
+<div class="eyebrow">Ferramenta</div>
+<h2>Apresentações Comerciais</h2>
+<p class="lead">As apresentações oficiais da Gpsbi para reuniões com clientes. Abra para apresentar em tela cheia (tecla F) ou copie o link para enviar ao cliente.</p>
+</div>
+<div class="cards">
+<article class="card">
+<span class="card-kicker">Primeiro contato</span>
+<div style="font-size:19px;font-weight:800;color:#071B33;margin:6px 0;">Institucional</div>
+<p>A Gpsbi completa: origem, soluções, ecossistema e demonstração. Para quando ainda não sabemos qual é a dor do cliente.</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;"><a class="sig-btn" href="/apresentacoes/institucional/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;">Abrir</a><button class="sig-btn-secondary" onclick="apCopiar(this,'/apresentacoes/institucional/')" type="button">Copiar link</button></div>
+</article>
+<article class="card">
+<span class="card-kicker">Financeiro 360°</span>
+<div style="font-size:19px;font-weight:800;color:#071B33;margin:6px 0;">Financeiro</div>
+<p>Para clientes de BPO: rotina financeira, aprovação de pagamentos, conciliação, ecossistema e demonstração.</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;"><a class="sig-btn" href="/apresentacoes/financeiro/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;">Abrir</a><button class="sig-btn-secondary" onclick="apCopiar(this,'/apresentacoes/financeiro/')" type="button">Copiar link</button></div>
+</article>
+<article class="card">
+<span class="card-kicker">BI e indicadores</span>
+<div style="font-size:19px;font-weight:800;color:#071B33;margin:6px 0;">BI</div>
+<p>Comercial inteligente e crescimento com controle: vendas, margem, DRE, fluxo projetado e indicadores.</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;"><a class="sig-btn" href="/apresentacoes/bi/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;">Abrir</a><button class="sig-btn-secondary" onclick="apCopiar(this,'/apresentacoes/bi/')" type="button">Copiar link</button></div>
+</article>
+</div>
+<script>
+function apCopiar(btn, caminho){
+  var url = 'https://www.gpsbi.com.br' + caminho;
+  var ok = function(){ var t = btn.textContent; btn.textContent = 'Link copiado'; setTimeout(function(){ btn.textContent = t; }, 1800); };
+  if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(url).then(ok, function(){ window.prompt('Copie o link:', url); }); }
+  else { window.prompt('Copie o link:', url); }
+}
+</script>
 </div>
 </section>
 <section class="final">
