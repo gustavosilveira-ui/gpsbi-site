@@ -618,7 +618,7 @@ function openUniversoGPSBI(event) {
 
   const LIVRO_CONVIDADOS = ['ed3a50b5853f232e5e779146ed043c583fef0a56af0406a785bef047c84872e9', '68ddd57bd34120209a788998e883a5ad4a47a9d5a423b9d634c486770b76a914'];
   async function livroHash(t){ const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)); return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join(''); }
-  async function livroAutorizado(email){ if((email.split('@')[1]||'') === 'gpsbi.com.br') return true; try { return LIVRO_CONVIDADOS.indexOf(await livroHash(email)) > -1; } catch(e){ return false; } }
+  async function livroAutorizado(email){ const dom = email.split('@')[1]||''; if(dom === 'gpsbi.com.br' || dom === 'patrimoniumcontabilidade.com.br') return true; try { return LIVRO_CONVIDADOS.indexOf(await livroHash(email)) > -1; } catch(e){ return false; } }
   form.addEventListener('submit', async e=>{
     e.preventDefault();
     const email = input.value.trim().toLowerCase();
