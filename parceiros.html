@@ -419,6 +419,16 @@ p, li { text-wrap: pretty; }
 .dq-sucesso .dialogo-topo { align-self: stretch; width: 100%; display: flex; justify-content: flex-end; margin-bottom: 4px; }
 .dq-sucesso .acoes { justify-content: center; }
 #dialogo-questionario textarea { font: inherit; font-size: 15px; width: 100%; padding: 12px 14px; border: 1px solid #B9C8D8; border-radius: 12px; resize: vertical; }
+.dq-escolha { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+.dq-opcoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px; }
+.dq-opcao { display: flex; flex-direction: column; gap: 6px; padding: 20px; border: 1px solid var(--borda); border-radius: 16px; background: var(--papel); }
+.dq-opcao > span { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--texto-3); }
+.dq-opcao h3 { margin: 0; font-size: 18px; }
+.dq-opcao p { margin: 0; color: var(--texto-2); font-size: 14px; }
+.dq-acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 10px; }
+.dq-acoes .botao { text-decoration: none; }
+.dq-link { font-size: 12px !important; color: var(--texto-3) !important; overflow-wrap: anywhere; }
+.dq-voltar { background: none; border: 0; padding: 0; font: inherit; color: var(--azul); text-decoration: underline; cursor: pointer; }
 .sair { background: none; border: 0; color: #8FA3BA; font: inherit; font-size: 12px; cursor: pointer; text-decoration: underline; padding: 0; }
 
 </style>
@@ -609,9 +619,31 @@ p, li { text-wrap: pretty; }
 </button>
 
 <dialog id="dialogo-questionario" class="dialogo dialogo-largo" aria-labelledby="dq-titulo">
-  <form class="formulario simulador" novalidate>
+  <div class="dq-escolha">
+    <div class="dialogo-topo"><h2>Questionário do cliente</h2><button type="button" class="fechar" data-fechar aria-label="Fechar"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <p class="dialogo-intro">As respostas chegam na Gpsbi com os valores indicados, e a gente retorna com a proposta. O cliente nunca vê valores.</p>
+    <div class="dq-opcoes">
+      <div class="dq-opcao">
+        <span>Mais comum</span>
+        <h3>Mandar para o cliente responder</h3>
+        <p>Ele responde sozinho em uns 2 minutos, pelo celular ou computador.</p>
+        <div class="dq-acoes">
+          <button type="button" class="botao botao-pri" data-copiar="" data-link-cliente>Copiar link</button>
+          <a class="botao botao-sec" data-whats href="#" target="_blank" rel="noopener">Enviar no WhatsApp</a>
+        </div>
+        <p class="dq-link" data-link-texto></p>
+      </div>
+      <div class="dq-opcao">
+        <span>Já tenho as informações</span>
+        <h3>Preencher agora</h3>
+        <p>Você responde no lugar do cliente, durante ou depois da reunião.</p>
+        <div class="dq-acoes"><button type="button" class="botao botao-sec" data-preencher>Preencher agora</button></div>
+      </div>
+    </div>
+  </div>
+  <form class="formulario simulador" novalidate hidden>
     <div class="dialogo-topo"><h2 id="dq-titulo">Questionário do cliente</h2><button type="button" class="fechar" data-fechar aria-label="Fechar"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-    <p class="dialogo-intro">Responda com o cliente ou com o que você já sabe dele. A Gpsbi recebe as respostas por e-mail, com os valores indicados, e retorna com a proposta.</p>
+    <p class="dialogo-intro">Responda com o que você já sabe do cliente. A Gpsbi recebe as respostas por e-mail, com os valores indicados, e retorna com a proposta. <button type="button" class="dq-voltar" data-voltar>Voltar</button></p>
     <fieldset class="pergunta"><legend>Cliente</legend>
       <label>Empresa do cliente<input name="empresa" required maxlength="160" autocomplete="off"></label>
       <label><span>Contato no cliente <span class="opcional">(opcional)</span></span><input name="contato" maxlength="160" autocomplete="off" placeholder="Nome, telefone ou e-mail"></label>
@@ -650,11 +682,32 @@ p, li { text-wrap: pretty; }
     if (email.split('@')[1] === 'gpsbi.com.br') return Promise.resolve(true);
     return hash(email).then(function (h) { return CONVIDADOS.indexOf(h) > -1; }).catch(function () { return false; });
   }
+  // Código do parceiro no link do diagnóstico (nunca o e-mail da pessoa)
+  var DOMINIOS = { 'patrimoniumcontabilidade.com.br': 'patrimonium' };
+  var DIAG = 'https://propostas.gpsbi.com.br/diagnostico';
   function liberar(email) {
     document.body.dataset.parceiro = email;
+    var cod = DOMINIOS[email.split('@')[1]] || '';
+    var link = DIAG + (cod ? '?p=' + cod : '');
+    var msg = 'Olá! Para prepararmos uma proposta para a sua empresa, responda este diagnóstico rápido (leva uns 2 minutos): ' + link;
+    document.querySelectorAll('[data-copiar^="' + DIAG + '"], [data-link-cliente]').forEach(function (b) { b.setAttribute('data-copiar', link); });
+    document.querySelectorAll('a[href^="' + DIAG + '"]').forEach(function (a) { a.href = link; });
+    document.querySelectorAll('[data-whats]').forEach(function (a) { a.href = 'https://wa.me/?text=' + encodeURIComponent(msg); });
+    document.querySelectorAll('[data-link-texto]').forEach(function (p) { p.textContent = link.replace('https://', ''); });
     document.getElementById('entrada').hidden = true;
     document.getElementById('conteudo').hidden = false;
   }
+  // O questionário sempre abre na escolha: mandar ao cliente ou preencher agora
+  var dq = document.getElementById('dialogo-questionario');
+  function verEscolha(sim) {
+    dq.querySelector('.dq-escolha').hidden = !sim;
+    dq.querySelector('form').hidden = sim;
+    dq.querySelector('.dq-sucesso').hidden = true;
+    dq.scrollTop = 0;
+  }
+  document.querySelectorAll('[data-abrir="dialogo-questionario"]').forEach(function (b) { b.addEventListener('click', function () { verEscolha(true); }); });
+  dq.querySelector('[data-preencher]').addEventListener('click', function () { verEscolha(false); });
+  dq.querySelector('[data-voltar]').addEventListener('click', function () { verEscolha(true); });
   var guardado = '';
   try { guardado = sessionStorage.getItem(CHAVE) || sessionStorage.getItem('gpsbi_founder_access') || ''; } catch (e) {}
   autorizado(guardado).then(function (ok) { if (ok) liberar(guardado.trim().toLowerCase()); });
@@ -738,7 +791,7 @@ p, li { text-wrap: pretty; }
   function coletar() {
     var respostas = { quer: [] };
     Array.prototype.forEach.call(form.elements, function (el) {
-      if (!el.name || ['nome', 'empresa', 'email', 'telefone', 'website', 'contato', 'obs'].indexOf(el.name) > -1) return;
+      if (!el.name || ['nome', 'empresa', 'email', 'telefone', 'website', 'contato', 'obs', 'indicacao'].indexOf(el.name) > -1) return;
       if (el.name === 'quer') { if (el.checked) respostas.quer.push(el.value); return; }
       if (el.type === 'radio') { if (el.checked) respostas[el.name] = el.value; return; }
     });
@@ -808,7 +861,7 @@ p, li { text-wrap: pretty; }
     else {
       var faltando = Array.prototype.find.call(form.querySelectorAll('input[required]'), function (el) { return !el.value.trim(); });
       if (faltando) { mostrarErro(modo === 'parceiro' ? 'Informe o nome da empresa do cliente.' : 'Preencha seu nome, a empresa e o e-mail.'); faltando.focus(); return; }
-      ['nome', 'empresa', 'email', 'telefone', 'website', 'contato', 'obs'].forEach(function (n) { var el = form.elements[n]; dados[n] = el ? el.value : ''; });
+      ['nome', 'empresa', 'email', 'telefone', 'website', 'contato', 'obs', 'indicacao'].forEach(function (n) { var el = form.elements[n]; dados[n] = el ? el.value : ''; });
       if (modo === 'parceiro') dados.parceiro = corpo.dataset.parceiro || '';
       dados.t = abertoEm;
     }
