@@ -413,6 +413,8 @@ section[aria-labelledby="t-fluxo"] .tabela tbody th { white-space: nowrap; }
 .materiais { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px; }
 .material { display: flex; flex-direction: column; gap: 8px; background: var(--papel); border: 1px solid var(--borda); border-radius: var(--raio); padding: 22px; text-decoration: none; color: inherit; }
 .material:hover { border-color: var(--azul); }
+.material-botao { font: inherit; text-align: left; cursor: pointer; width: 100%; }
+.material-botao[disabled] { cursor: default; opacity: .85; }
 .material span { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--texto-3); }
 .material h3 { margin: 0; font-size: 19px; }
 .material p { margin: 0; color: var(--texto-2); font-size: 15px; }
@@ -479,6 +481,14 @@ section[aria-labelledby="t-fluxo"] .tabela tbody th { white-space: nowrap; }
     </div>
   </section>
 
+
+  <section class="secao wrap" aria-labelledby="t-transicao">
+    <div class="secao-cabeca"><h2 id="t-transicao">Transição dos clientes Patrimonium</h2><span>material restrito da transição do financeiro</span></div>
+    <div class="materiais">
+      <a class="material" href="/apresentacoes/transicao/" target="_blank" rel="noopener"><span>Para os clientes</span><h3>Apresentação da transição</h3><p>A apresentação do encontro com os clientes do financeiro Patrimonium.</p><b>Abrir →</b></a>
+      <button type="button" class="material material-botao" data-pdca><span>Restrito</span><h3>PDCA da transição</h3><p>Plano, cronograma, mapa da carteira e riscos. Por segurança, o acesso chega por um link no seu e-mail.</p><b data-pdca-status>Receber o link no meu e-mail →</b></button>
+    </div>
+  </section>
 
   <section class="secao wrap" aria-labelledby="t-quem">
     <p class="rotulo" id="t-quem">Quem é a Gpsbi</p>
@@ -673,7 +683,7 @@ section[aria-labelledby="t-fluxo"] .tabela tbody th { white-space: nowrap; }
 
 <script>
 (function () {
-  var CONVIDADOS = ["c37c9c5d50b75a1b094817c330ff34a5dcd7babc5eebf14ba4570975358578fc","dbb7d1c827dd9c0dbbb1b948438b07b966072e2fa87e5cd5b3353162a8780e1c","59d1ec8af087190f0af5c83aeff5904c3f7097f82efe7a23d2742c19ff97bedd","f9691387ff46438760f069ed560f37870f4699bc8e88647064246312de5f24ef"];
+  var CONVIDADOS = ["c37c9c5d50b75a1b094817c330ff34a5dcd7babc5eebf14ba4570975358578fc","dbb7d1c827dd9c0dbbb1b948438b07b966072e2fa87e5cd5b3353162a8780e1c","59d1ec8af087190f0af5c83aeff5904c3f7097f82efe7a23d2742c19ff97bedd","f9691387ff46438760f069ed560f37870f4699bc8e88647064246312de5f24ef","9d480abdcb41bf634edaf163f49ef295cd4c8d3af172ee476430393f1f8d3334"];
   var CHAVE = 'gpsbi_parceiros_access';
   function hash(t) {
     return crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)).then(function (b) {
@@ -715,6 +725,17 @@ section[aria-labelledby="t-fluxo"] .tabela tbody th { white-space: nowrap; }
   var guardado = '';
   try { guardado = sessionStorage.getItem(CHAVE) || sessionStorage.getItem('gpsbi_founder_access') || ''; } catch (e) {}
   autorizado(guardado).then(function (ok) { if (ok) liberar(guardado.trim().toLowerCase()); });
+  var PDCA = 'https://propostas.gpsbi.com.br/api/parceiros-pdca';
+  document.querySelectorAll('[data-pdca]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var st = b.querySelector('[data-pdca-status]');
+      b.disabled = true; st.textContent = 'Enviando…';
+      fetch(PDCA, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: document.body.dataset.parceiro || '' }) })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (x) { st.textContent = x.ok ? 'Se o seu e-mail tiver acesso, o link chega em instantes. Confira a caixa de entrada.' : (x.j.erro || 'Não deu certo agora. Tente de novo.'); if (!x.ok) b.disabled = false; })
+        .catch(function () { st.textContent = 'Não deu certo agora. Tente de novo.'; b.disabled = false; });
+    });
+  });
   var form = document.getElementById('form-entrada');
   var erro = form.querySelector('.mensagem-erro');
   form.addEventListener('submit', function (ev) {
