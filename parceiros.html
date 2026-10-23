@@ -435,6 +435,28 @@ section[aria-labelledby="t-fluxo"] .tabela tbody th { white-space: nowrap; }
 .dq-voltar { background: none; border: 0; padding: 0; font: inherit; color: var(--azul); text-decoration: underline; cursor: pointer; }
 .sair { background: none; border: 0; color: #8FA3BA; font: inherit; font-size: 12px; cursor: pointer; text-decoration: underline; padding: 0; }
 
+/* CNPJs do questionário */
+.cnpj-lista { display: flex; flex-direction: column; gap: 10px; }
+.cnpj-linha { display: flex; gap: 8px; align-items: stretch; flex-wrap: wrap; }
+.cnpj-linha input, .cnpj-linha select { font: inherit; font-size: 15px; min-height: 44px; padding: 10px 14px; border: 1px solid #B9C8D8; border-radius: 12px; background: var(--papel); color: var(--texto); }
+.cnpj-linha input { flex: 1 1 210px; min-width: 0; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+.cnpj-linha select { flex: 0 1 200px; min-width: 0; }
+.cnpj-linha input:focus-visible, .cnpj-linha select:focus-visible { outline: 2px solid var(--ciano); outline-offset: 1px; border-color: var(--azul); }
+.cnpj-remover { flex: 0 0 44px; min-height: 44px; border: 1px solid var(--borda); border-radius: 12px; background: var(--papel); color: var(--texto-3); font-size: 20px; line-height: 1; cursor: pointer; }
+.cnpj-remover:hover { color: var(--texto); border-color: #B9C8D8; }
+.cnpj-info { margin: 6px 2px 0; font-size: 13px; line-height: 1.4; color: var(--texto-3); }
+.cnpj-info:empty { display: none; }
+.cnpj-info strong { color: var(--texto); font-weight: 600; }
+.cnpj-ok::before { content: "✓ "; color: #0B7A6E; font-weight: 700; }
+.cnpj-erro { color: #B42318; }
+.cnpj-discreto { color: var(--texto-3); opacity: .85; }
+.cnpj-alerta { color: #B42318; font-weight: 600; }
+.cnpj-adicionar { align-self: flex-start; margin-top: 2px; padding: 6px 2px; border: 0; background: none; font: inherit; font-size: 14px; font-weight: 600; color: var(--azul); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.cnpj-adicionar:hover { color: var(--texto); }
+/* Pergunta obrigatória sem resposta */
+.pergunta-faltando legend { color: #B42318; }
+.pergunta-faltando legend::after { content: " · falta responder"; font-weight: 500; font-size: 13px; }
+.pergunta-faltando .opcoes { box-shadow: inset 0 0 0 1.5px #F04438; }
 </style>
 </head>
 <body data-modo="parceiro" data-endpoint="https://propostas.gpsbi.com.br/api/simular">
@@ -656,13 +678,14 @@ section[aria-labelledby="t-fluxo"] .tabela tbody th { white-space: nowrap; }
   <form class="formulario simulador" novalidate hidden>
     <div class="dialogo-topo"><h2 id="dq-titulo">Questionário do cliente</h2><button type="button" class="fechar" data-fechar aria-label="Fechar"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
     <p class="dialogo-intro">Responda com o que você já sabe do cliente. A Gpsbi recebe as respostas por e-mail, com os valores indicados, e retorna com a proposta. <button type="button" class="dq-voltar" data-voltar>Voltar</button></p>
+    <fieldset class="pergunta" data-bloco-cnpj><legend>CNPJ do cliente</legend><p class="ajuda">Buscamos a razão social e o regime tributário na Receita Federal. Se o regime não vier, escolha na lista (pode marcar “Não sei”). Tem mais de uma empresa? Adicione os outros CNPJs.</p><div class="cnpj-lista" data-cnpjs><div class="cnpj-item"><div class="cnpj-linha"><input name="cnpj" inputmode="text" autocapitalize="characters" spellcheck="false" autocomplete="off" maxlength="18" placeholder="00.000.000/0000-00" aria-label="CNPJ"><select name="regime" aria-label="Regime tributário" required><option value="">Regime tributário</option><option value="simples">Simples Nacional</option><option value="mei">MEI</option><option value="presumido">Lucro Presumido</option><option value="real">Lucro Real</option><option value="outro">Outro</option><option value="nao_sei">Não sei</option></select><button type="button" class="cnpj-remover" data-remover-cnpj aria-label="Remover este CNPJ" hidden>×</button></div><p class="cnpj-info" aria-live="polite"></p></div></div><button type="button" class="cnpj-adicionar" data-adicionar-cnpj>+ Adicionar outro CNPJ</button></fieldset>
     <fieldset class="pergunta"><legend>Cliente</legend>
       <label>Empresa do cliente<input name="empresa" required maxlength="160" autocomplete="off"></label>
       <label>Nome do contato<input name="nome" required maxlength="120" autocomplete="off"></label>
       <label>Telefone do contato<input name="telefone" type="tel" inputmode="tel" required maxlength="40" autocomplete="off"></label>
       <label>E-mail do contato<input name="email" type="email" inputmode="email" required maxlength="200" autocomplete="off"></label>
     </fieldset>
-    <fieldset class="pergunta"><legend>O que o cliente precisa?</legend><p class="ajuda">Pode marcar mais de uma opção.</p><div class="opcoes opcoes-cartao"><label class="opcao opcao-cartao"><input type="checkbox" name="quer" value="f360" checked><span><strong>Rotina financeira</strong><small>Contas a pagar e a receber, conciliação, fluxo de caixa diário</small></span></label><label class="opcao opcao-cartao"><input type="checkbox" name="quer" value="comercial"><span><strong>Indicadores de vendas</strong><small>Vendas, margem, vendedores, clientes, canais</small></span></label><label class="opcao opcao-cartao"><input type="checkbox" name="quer" value="estoque"><span><strong>Estoque e compras</strong><small>Cobertura, ruptura e reposição</small></span></label><label class="opcao opcao-cartao"><input type="checkbox" name="quer" value="dre"><span><strong>DRE e resultado</strong><small>Quanto a empresa realmente ganha por mês</small></span></label><label class="opcao opcao-cartao"><input type="checkbox" name="quer" value="fluxo"><span><strong>Fluxo de caixa projetado</strong><small>Saldo previsto para os próximos dias e meses</small></span></label></div></fieldset><fieldset class="pergunta"><legend>Faturamento médio por mês</legend><div class="opcoes"><label class="opcao"><input type="radio" name="faturamento" value="ate300" checked><span>Até R$ 300 mil</span></label><label class="opcao"><input type="radio" name="faturamento" value="ate1500"><span>R$ 300 mil a R$ 1,5 milhão</span></label><label class="opcao"><input type="radio" name="faturamento" value="mais1500"><span>Acima de R$ 1,5 milhão</span></label></div></fieldset><fieldset class="pergunta"><legend>Qual sistema de gestão (ERP) a empresa usa?</legend><p class="ajuda">Omie, Conta Azul, Bling e Mercado Livre têm integração direta.</p><div class="opcoes"><label class="opcao"><input type="radio" name="sistema" value="api" checked><span>Omie, Conta Azul, Bling ou outro com integração</span></label><label class="opcao"><input type="radio" name="sistema" value="online"><span>Sistema online, sem integração</span></label><label class="opcao"><input type="radio" name="sistema" value="local"><span>Sistema instalado no computador</span></label><label class="opcao"><input type="radio" name="sistema" value="nenhum"><span>Não usa sistema</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Quantas empresas (CNPJs)?</legend><div class="opcoes"><label class="opcao"><input type="radio" name="cnpjs" value="1" checked><span>1</span></label><label class="opcao"><input type="radio" name="cnpjs" value="2"><span>2</span></label><label class="opcao"><input type="radio" name="cnpjs" value="3"><span>3</span></label><label class="opcao"><input type="radio" name="cnpjs" value="4+"><span>4 ou mais</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Pagamentos + recebimentos por mês</legend><p class="ajuda">Some as contas a pagar e a receber de um mês normal.</p><div class="opcoes"><label class="opcao"><input type="radio" name="titulos" value="ate50" checked><span>Até 50</span></label><label class="opcao"><input type="radio" name="titulos" value="ate100"><span>51 a 100</span></label><label class="opcao"><input type="radio" name="titulos" value="ate200"><span>101 a 200</span></label><label class="opcao"><input type="radio" name="titulos" value="ate300"><span>201 a 300</span></label><label class="opcao"><input type="radio" name="titulos" value="ate600"><span>301 a 600</span></label><label class="opcao"><input type="radio" name="titulos" value="mais600"><span>Mais de 600</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Funcionários CLT</legend><p class="ajuda">Conte quem tem carteira assinada.</p><div class="opcoes"><label class="opcao"><input type="radio" name="clt" value="0" checked><span>Nenhum</span></label><label class="opcao"><input type="radio" name="clt" value="1-5"><span>1 a 5</span></label><label class="opcao"><input type="radio" name="clt" value="6-15"><span>6 a 15</span></label><label class="opcao"><input type="radio" name="clt" value="16-50"><span>16 a 50</span></label><label class="opcao"><input type="radio" name="clt" value="50+"><span>Mais de 50</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Prestadores PJ</legend><p class="ajuda">Pessoas que trabalham para a empresa e emitem nota todo mês.</p><div class="opcoes"><label class="opcao"><input type="radio" name="pj" value="0" checked><span>Nenhum</span></label><label class="opcao"><input type="radio" name="pj" value="1-5"><span>1 a 5</span></label><label class="opcao"><input type="radio" name="pj" value="6-15"><span>6 a 15</span></label><label class="opcao"><input type="radio" name="pj" value="16-50"><span>16 a 50</span></label><label class="opcao"><input type="radio" name="pj" value="50+"><span>Mais de 50</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Contas bancárias</legend><div class="opcoes"><label class="opcao"><input type="radio" name="contas" value="1" checked><span>1</span></label><label class="opcao"><input type="radio" name="contas" value="2"><span>2</span></label><label class="opcao"><input type="radio" name="contas" value="3-4"><span>3 ou 4</span></label><label class="opcao"><input type="radio" name="contas" value="5+"><span>5 ou mais</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Cartões de crédito e maquininhas</legend><div class="opcoes"><label class="opcao"><input type="radio" name="cartoes" value="0" checked><span>Nenhum</span></label><label class="opcao"><input type="radio" name="cartoes" value="1"><span>1</span></label><label class="opcao"><input type="radio" name="cartoes" value="2-3"><span>2 ou 3</span></label><label class="opcao"><input type="radio" name="cartoes" value="4+"><span>4 ou mais</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Cobrança ativa de inadimplentes</legend><div class="opcoes"><label class="opcao"><input type="radio" name="cobranca" value="nao" checked><span>Não precisa</span></label><label class="opcao"><input type="radio" name="cobranca" value="email"><span>Por e-mail</span></label><label class="opcao"><input type="radio" name="cobranca" value="completa"><span>Por e-mail, WhatsApp e telefone</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Emissão de notas fiscais</legend><div class="opcoes"><label class="opcao"><input type="radio" name="notas" value="nao" checked><span>Não precisa</span></label><label class="opcao"><input type="radio" name="notas" value="ate50"><span>Até 50 por mês</span></label><label class="opcao"><input type="radio" name="notas" value="ate200"><span>51 a 200 por mês</span></label><label class="opcao"><input type="radio" name="notas" value="mais200"><span>Mais de 200 por mês</span></label></div></fieldset><fieldset class="pergunta" data-se="f360" data-com-sistema><legend>Conciliação: o banco e o sistema refletem a realidade da empresa?</legend><p class="ajuda">Há quanto tempo o saldo do banco não bate com o sistema.</p><div class="opcoes"><label class="opcao"><input type="radio" name="atraso" value="em_dia" checked><span>Sim, está tudo conciliado</span></label><label class="opcao"><input type="radio" name="atraso" value="ate3"><span>1 a 3 meses sem conciliar</span></label><label class="opcao"><input type="radio" name="atraso" value="ate12"><span>4 a 12 meses</span></label><label class="opcao"><input type="radio" name="atraso" value="mais12"><span>Mais de 12 meses</span></label></div></fieldset><fieldset class="pergunta" data-se="bi"><legend>De quantos lugares vêm as vendas?</legend><p class="ajuda">Some sistemas e contas de marketplace. Ex.: 2 Mercado Livre + 2 Shopee + Bling = 5.</p><div class="opcoes"><label class="opcao"><input type="radio" name="fontes" value="1" checked><span>1</span></label><label class="opcao"><input type="radio" name="fontes" value="2"><span>2</span></label><label class="opcao"><input type="radio" name="fontes" value="3"><span>3</span></label><label class="opcao"><input type="radio" name="fontes" value="4"><span>4</span></label><label class="opcao"><input type="radio" name="fontes" value="5+"><span>5 ou mais</span></label></div></fieldset>
+    <fieldset class="pergunta"><legend>O que o cliente vende?</legend><p class="ajuda">Ajuda a definir o tipo de nota fiscal e a rotina com a contabilidade.</p><div class="opcoes"><label class="opcao"><input type="radio" name="atividade" value="servicos"><span>Serviços</span></label><label class="opcao"><input type="radio" name="atividade" value="comercio"><span>Produtos (comércio)</span></label><label class="opcao"><input type="radio" name="atividade" value="industria"><span>Fabrica produtos (indústria)</span></label><label class="opcao"><input type="radio" name="atividade" value="misto"><span>Serviços e produtos</span></label></div></fieldset><fieldset class="pergunta"><legend>O que o cliente precisa?</legend><p class="ajuda">Pode marcar mais de uma opção.</p><div class="opcoes opcoes-cartao"><label class="opcao opcao-cartao"><input type="checkbox" name="quer" value="f360"><span><strong>Rotina financeira</strong><small>Contas a pagar e a receber, conciliação, fluxo de caixa diário</small></span></label><label class="opcao opcao-cartao"><input type="checkbox" name="quer" value="comercial"><span><strong>Indicadores de vendas</strong><small>Vendas, margem, vendedores, clientes, canais</small></span></label><label class="opcao opcao-cartao"><input type="checkbox" name="quer" value="estoque"><span><strong>Estoque e compras</strong><small>Cobertura, ruptura e reposição</small></span></label><label class="opcao opcao-cartao"><input type="checkbox" name="quer" value="dre"><span><strong>DRE e resultado</strong><small>Quanto a empresa realmente ganha por mês</small></span></label><label class="opcao opcao-cartao"><input type="checkbox" name="quer" value="fluxo"><span><strong>Fluxo de caixa projetado</strong><small>Saldo previsto para os próximos dias e meses</small></span></label></div></fieldset><fieldset class="pergunta"><legend>Faturamento médio por mês</legend><div class="opcoes"><label class="opcao"><input type="radio" name="faturamento" value="ate300"><span>Até R$ 300 mil</span></label><label class="opcao"><input type="radio" name="faturamento" value="ate1500"><span>R$ 300 mil a R$ 1,5 milhão</span></label><label class="opcao"><input type="radio" name="faturamento" value="mais1500"><span>Acima de R$ 1,5 milhão</span></label><label class="opcao"><input type="radio" name="faturamento" value="nao_sei"><span>Não sei</span></label></div></fieldset><fieldset class="pergunta"><legend>Qual sistema de gestão (ERP) a empresa usa?</legend><p class="ajuda">Omie, Conta Azul, Bling e Mercado Livre têm integração direta.</p><div class="opcoes"><label class="opcao"><input type="radio" name="sistema" value="api"><span>Omie, Conta Azul, Bling ou outro com integração</span></label><label class="opcao"><input type="radio" name="sistema" value="online"><span>Sistema online, sem integração</span></label><label class="opcao"><input type="radio" name="sistema" value="local"><span>Sistema instalado no computador</span></label><label class="opcao"><input type="radio" name="sistema" value="nenhum"><span>Não usa sistema</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Pagamentos + recebimentos por mês</legend><p class="ajuda">Some as contas a pagar e a receber de um mês normal.</p><div class="opcoes"><label class="opcao"><input type="radio" name="titulos" value="ate50"><span>Até 50</span></label><label class="opcao"><input type="radio" name="titulos" value="ate100"><span>51 a 100</span></label><label class="opcao"><input type="radio" name="titulos" value="ate200"><span>101 a 200</span></label><label class="opcao"><input type="radio" name="titulos" value="ate300"><span>201 a 300</span></label><label class="opcao"><input type="radio" name="titulos" value="ate600"><span>301 a 600</span></label><label class="opcao"><input type="radio" name="titulos" value="mais600"><span>Mais de 600</span></label><label class="opcao"><input type="radio" name="titulos" value="nao_sei"><span>Não sei</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Funcionários CLT</legend><p class="ajuda">Conte quem tem carteira assinada.</p><div class="opcoes"><label class="opcao"><input type="radio" name="clt" value="0"><span>Nenhum</span></label><label class="opcao"><input type="radio" name="clt" value="1-5"><span>1 a 5</span></label><label class="opcao"><input type="radio" name="clt" value="6-15"><span>6 a 15</span></label><label class="opcao"><input type="radio" name="clt" value="16-50"><span>16 a 50</span></label><label class="opcao"><input type="radio" name="clt" value="50+"><span>Mais de 50</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Prestadores PJ</legend><p class="ajuda">Pessoas que trabalham para a empresa e emitem nota todo mês.</p><div class="opcoes"><label class="opcao"><input type="radio" name="pj" value="0"><span>Nenhum</span></label><label class="opcao"><input type="radio" name="pj" value="1-5"><span>1 a 5</span></label><label class="opcao"><input type="radio" name="pj" value="6-15"><span>6 a 15</span></label><label class="opcao"><input type="radio" name="pj" value="16-50"><span>16 a 50</span></label><label class="opcao"><input type="radio" name="pj" value="50+"><span>Mais de 50</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Contas bancárias</legend><div class="opcoes"><label class="opcao"><input type="radio" name="contas" value="1"><span>1</span></label><label class="opcao"><input type="radio" name="contas" value="2"><span>2</span></label><label class="opcao"><input type="radio" name="contas" value="3-4"><span>3 ou 4</span></label><label class="opcao"><input type="radio" name="contas" value="5+"><span>5 ou mais</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Cartões de crédito</legend><p class="ajuda">Cartões corporativos usados para pagar despesas.</p><div class="opcoes"><label class="opcao"><input type="radio" name="cartoesCredito" value="0"><span>Nenhum</span></label><label class="opcao"><input type="radio" name="cartoesCredito" value="1"><span>1</span></label><label class="opcao"><input type="radio" name="cartoesCredito" value="2-3"><span>2 ou 3</span></label><label class="opcao"><input type="radio" name="cartoesCredito" value="4+"><span>4 ou mais</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Maquininhas de cartão</legend><p class="ajuda">Maquininhas e adquirentes usados para receber das vendas (Stone, Cielo, PagSeguro…).</p><div class="opcoes"><label class="opcao"><input type="radio" name="maquininhas" value="0"><span>Nenhuma</span></label><label class="opcao"><input type="radio" name="maquininhas" value="1"><span>1</span></label><label class="opcao"><input type="radio" name="maquininhas" value="2-3"><span>2 ou 3</span></label><label class="opcao"><input type="radio" name="maquininhas" value="4+"><span>4 ou mais</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Cobrança ativa de inadimplentes</legend><div class="opcoes"><label class="opcao"><input type="radio" name="cobranca" value="nao"><span>Não precisa</span></label><label class="opcao"><input type="radio" name="cobranca" value="email"><span>Por e-mail</span></label><label class="opcao"><input type="radio" name="cobranca" value="completa"><span>Por e-mail, WhatsApp e telefone</span></label></div></fieldset><fieldset class="pergunta" data-se="f360"><legend>Emissão de notas fiscais</legend><div class="opcoes"><label class="opcao"><input type="radio" name="notas" value="nao"><span>Não precisa</span></label><label class="opcao"><input type="radio" name="notas" value="ate50"><span>Até 50 por mês</span></label><label class="opcao"><input type="radio" name="notas" value="ate200"><span>51 a 200 por mês</span></label><label class="opcao"><input type="radio" name="notas" value="mais200"><span>Mais de 200 por mês</span></label></div></fieldset><fieldset class="pergunta" data-se="f360" data-com-sistema><legend>Conciliação: o banco e o sistema refletem a realidade da empresa?</legend><p class="ajuda">Há quanto tempo o saldo do banco não bate com o sistema.</p><div class="opcoes"><label class="opcao"><input type="radio" name="atraso" value="em_dia"><span>Sim, está tudo conciliado</span></label><label class="opcao"><input type="radio" name="atraso" value="ate3"><span>1 a 3 meses sem conciliar</span></label><label class="opcao"><input type="radio" name="atraso" value="ate12"><span>4 a 12 meses</span></label><label class="opcao"><input type="radio" name="atraso" value="mais12"><span>Mais de 12 meses</span></label><label class="opcao"><input type="radio" name="atraso" value="nao_sei"><span>Não sei</span></label></div></fieldset><fieldset class="pergunta" data-se="bi"><legend>De quantos lugares vêm as vendas?</legend><p class="ajuda">Some sistemas e contas de marketplace. Ex.: 2 Mercado Livre + 2 Shopee + Bling = 5.</p><div class="opcoes"><label class="opcao"><input type="radio" name="fontes" value="1"><span>1</span></label><label class="opcao"><input type="radio" name="fontes" value="2"><span>2</span></label><label class="opcao"><input type="radio" name="fontes" value="3"><span>3</span></label><label class="opcao"><input type="radio" name="fontes" value="4"><span>4</span></label><label class="opcao"><input type="radio" name="fontes" value="5+"><span>5 ou mais</span></label></div></fieldset>
     <fieldset class="pergunta"><legend>Observações <span class="opcional">(opcional)</span></legend>
       <label><textarea name="obs" rows="3" maxlength="1500" placeholder="Algo que a Gpsbi precisa saber: urgência, sistema usado, contexto da reunião…"></textarea></label>
     </fieldset>
@@ -810,8 +833,144 @@ section[aria-labelledby="t-fluxo"] .tabela tbody th { white-space: nowrap; }
     var sis = form.querySelector('input[name="sistema"]:checked');
     form.querySelectorAll('[data-com-sistema]').forEach(function (f) { if (sis && sis.value === 'nenhum') f.hidden = true; });
   }
-  form.addEventListener('change', atualizarPerguntas);
+  form.addEventListener('change', function (ev) {
+    var f = ev.target.closest && ev.target.closest('.pergunta-faltando');
+    if (f) f.classList.remove('pergunta-faltando');
+    atualizarPerguntas();
+  });
   atualizarPerguntas();
+
+  // CNPJs: máscara, validação, consulta do regime na Receita e mais de uma empresa
+  var listaCnpj = form.querySelector('[data-cnpjs]');
+  var urlCnpj = endpoint.replace(/\/api\/simular$/, '/api/cnpj');
+  var modeloCnpj = listaCnpj ? listaCnpj.querySelector('.cnpj-item').cloneNode(true) : null;
+  // CNPJ pode ter letras (regra da Receita para CNPJs emitidos a partir de jul/2026)
+  function soDigitos(v) { return String(v || '').toUpperCase().replace(/[^0-9A-Z]/g, ''); }
+  function cnpjOk(v) {
+    var c = soDigitos(v);
+    if (!/^[0-9A-Z]{12}\d{2}$/.test(c) || /^(.)\1+$/.test(c)) return false;
+    function dv(base) {
+      var soma = 0, peso = base.length - 7;
+      for (var i = 0; i < base.length; i++) { soma += (base.charCodeAt(i) - 48) * peso--; if (peso < 2) peso = 9; }
+      var r = soma % 11;
+      return r < 2 ? 0 : 11 - r;
+    }
+    var d1 = dv(c.slice(0, 12));
+    return c.slice(12) === String(d1) + String(dv(c.slice(0, 12) + d1));
+  }
+  function mascaraCnpj(v) {
+    var c = soDigitos(v).slice(0, 14);
+    var p = [c.slice(0, 2), c.slice(2, 5), c.slice(5, 8), c.slice(8, 12), c.slice(12, 14)];
+    var t = p[0];
+    if (p[1]) t += '.' + p[1];
+    if (p[2]) t += '.' + p[2];
+    if (p[3]) t += '/' + p[3];
+    if (p[4]) t += '-' + p[4];
+    return t;
+  }
+  function itensCnpj() { return listaCnpj ? Array.prototype.slice.call(listaCnpj.querySelectorAll('.cnpj-item')) : []; }
+  function infoCnpj(item, html, tipo) {
+    var p = item.querySelector('.cnpj-info');
+    p.innerHTML = html;
+    p.className = 'cnpj-info' + (tipo ? ' cnpj-' + tipo : '');
+  }
+  function atualizarRemover() {
+    var itens = itensCnpj();
+    itens.forEach(function (it) { it.querySelector('[data-remover-cnpj]').hidden = itens.length < 2; });
+  }
+  function consultarCnpj(item) {
+    var campo = item.querySelector('input[name="cnpj"]');
+    var c = soDigitos(campo.value);
+    item.dataset.razao = '';
+    item.dataset.fantasia = '';
+    if (c.length < 14) { item.dataset.consultado = ''; infoCnpj(item, ''); return; }
+    if (!cnpjOk(c)) { infoCnpj(item, 'CNPJ inválido. Confira os números.', 'erro'); return; }
+    var repetido = itensCnpj().some(function (o) { return o !== item && soDigitos(o.querySelector('input[name="cnpj"]').value) === c; });
+    if (repetido) { infoCnpj(item, 'Este CNPJ já foi informado.', 'erro'); return; }
+    if (item.dataset.consultado === c) return;
+    item.dataset.consultado = c;
+    var seq = (Number(item.dataset.seq) || 0) + 1;
+    item.dataset.seq = seq;
+    infoCnpj(item, 'Consultando…', 'discreto');
+    fetch(urlCnpj + '?n=' + c)
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (res) {
+        if (String(item.dataset.seq) !== String(seq)) return;
+        if (!res.ok) throw new Error(res.j.erro || '');
+        var d = res.j;
+        if (!d.encontrado) { infoCnpj(item, 'Não localizado na Receita. Pode seguir normalmente.', 'discreto'); return; }
+        item.dataset.razao = d.razao || '';
+        item.dataset.fantasia = d.fantasia || '';
+        var sel = item.querySelector('select[name="regime"]');
+        // Sugere o que a empresa vende pela atividade principal (CNAE), se ainda não foi respondido
+        if (d.atividade && item === itensCnpj()[0] && !form.querySelector('input[name="atividade"]:checked')) {
+          var opAtiv = form.querySelector('input[name="atividade"][value="' + d.atividade + '"]');
+          if (opAtiv) opAtiv.checked = true;
+        }
+        if (d.regime && !sel.dataset.manual) sel.value = d.regime;
+        var partes = ['<strong>' + esc(d.razao) + '</strong>'];
+        if (d.cidade) partes.push(esc(d.cidade));
+        if (d.situacao && !/ATIVA/i.test(d.situacao)) partes.push('<span class="cnpj-alerta">Situação: ' + esc(d.situacao) + '</span>');
+        if (d.regime) partes.push(esc(d.regimeRotulo));
+        infoCnpj(item, partes.join(' · '), 'ok');
+        // Preenche o nome da empresa com o primeiro CNPJ, se ainda estiver em branco
+        var campoEmpresa = form.elements.empresa;
+        if (campoEmpresa && item === itensCnpj()[0] && (!campoEmpresa.value.trim() || campoEmpresa.dataset.auto === '1')) {
+          campoEmpresa.value = d.fantasia || d.razao || '';
+          campoEmpresa.dataset.auto = '1';
+        }
+      })
+      .catch(function () {
+        if (String(item.dataset.seq) !== String(seq)) return;
+        item.dataset.consultado = '';
+        infoCnpj(item, '', '');
+      });
+  }
+  function prepararItem(item) {
+    var campo = item.querySelector('input[name="cnpj"]');
+    campo.addEventListener('input', function () {
+      var pos = campo.value.length === campo.selectionStart;
+      campo.value = mascaraCnpj(campo.value);
+      if (pos) campo.setSelectionRange(campo.value.length, campo.value.length);
+      consultarCnpj(item);
+    });
+    item.querySelector('select[name="regime"]').addEventListener('change', function (ev) { ev.target.dataset.manual = '1'; });
+
+    item.querySelector('[data-remover-cnpj]').addEventListener('click', function () {
+      if (itensCnpj().length < 2) return;
+      item.remove();
+      atualizarRemover();
+    });
+  }
+  function limparCnpjs() {
+    if (!listaCnpj) return;
+    itensCnpj().forEach(function (it, i) { if (i > 0) it.remove(); });
+    var primeiro = itensCnpj()[0];
+    ['razao', 'fantasia', 'consultado'].forEach(function (k) { primeiro.dataset[k] = ''; });
+    delete primeiro.querySelector('select[name="regime"]').dataset.manual;
+    infoCnpj(primeiro, '');
+    if (form.elements.empresa) delete form.elements.empresa.dataset.auto;
+    atualizarRemover();
+  }
+  if (listaCnpj) {
+    itensCnpj().forEach(prepararItem);
+    var botaoAdd = form.querySelector('[data-adicionar-cnpj]');
+    botaoAdd.addEventListener('click', function () {
+      if (itensCnpj().length >= 30) return;
+      var novo = modeloCnpj.cloneNode(true);
+      listaCnpj.appendChild(novo);
+      prepararItem(novo);
+      atualizarRemover();
+      novo.querySelector('input[name="cnpj"]').focus();
+    });
+    if (form.elements.empresa) form.elements.empresa.addEventListener('input', function () { delete form.elements.empresa.dataset.auto; });
+    atualizarRemover();
+  }
+  function lerCnpjs() {
+    return itensCnpj().map(function (it) {
+      return { cnpj: soDigitos(it.querySelector('input[name="cnpj"]').value), regime: it.querySelector('select[name="regime"]').value, razao: it.dataset.razao || '' };
+    }).filter(function (x) { return x.cnpj; });
+  }
 
   function coletar() {
     var respostas = { quer: [] };
@@ -820,6 +979,7 @@ section[aria-labelledby="t-fluxo"] .tabela tbody th { white-space: nowrap; }
       if (el.name === 'quer') { if (el.checked) respostas.quer.push(el.value); return; }
       if (el.type === 'radio') { if (el.checked) respostas[el.name] = el.value; return; }
     });
+    if (listaCnpj) respostas.empresas = lerCnpjs().filter(function (x) { return cnpjOk(x.cnpj); });
     return respostas;
   }
 
@@ -866,6 +1026,7 @@ section[aria-labelledby="t-fluxo"] .tabela tbody th { white-space: nowrap; }
   corpo.querySelectorAll('[data-novo]').forEach(function (b) {
     b.addEventListener('click', function () {
       form.reset();
+      limparCnpjs();
       atualizarPerguntas();
       erro.hidden = true;
       var s = b.closest('.diag-sucesso');
@@ -881,6 +1042,29 @@ section[aria-labelledby="t-fluxo"] .tabela tbody th { white-space: nowrap; }
     erro.hidden = true;
     var respostas = coletar();
     if (!respostas.quer.length) { mostrarErro('Marque pelo menos uma necessidade.'); return; }
+    if (listaCnpj) {
+      var invalido = itensCnpj().find(function (it) { var v = it.querySelector('input[name="cnpj"]').value; return soDigitos(v) && !cnpjOk(v); });
+      if (invalido) { mostrarErro('Confira o CNPJ informado: os números não conferem.'); invalido.querySelector('input').focus(); return; }
+      var semRegime = modo !== 'vendedor' && itensCnpj().find(function (it) { return soDigitos(it.querySelector('input[name="cnpj"]').value) && !it.querySelector('select[name="regime"]').value; });
+      if (semRegime) { mostrarErro('Escolha o regime tributário de cada CNPJ (se não souber, marque “Não sei”).'); semRegime.querySelector('select').focus(); return; }
+      if (modo !== 'vendedor' && !respostas.empresas.length) {
+        mostrarErro(modo === 'parceiro' ? 'Informe o CNPJ do cliente.' : 'Informe o CNPJ da sua empresa.');
+        itensCnpj()[0].querySelector('input').focus();
+        return;
+      }
+    }
+    // Perguntas de escolha visíveis são obrigatórias (no simulador do vendedor também, para o valor sair certo)
+    form.querySelectorAll('.pergunta-faltando').forEach(function (f) { f.classList.remove('pergunta-faltando'); });
+    var semResposta = Array.prototype.find.call(form.querySelectorAll('fieldset.pergunta'), function (f) {
+      if (f.hidden || !f.querySelector('input[type="radio"]')) return false;
+      return !f.querySelector('input[type="radio"]:checked');
+    });
+    if (semResposta) {
+      semResposta.classList.add('pergunta-faltando');
+      mostrarErro('Falta responder: ' + semResposta.querySelector('legend').textContent);
+      semResposta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
     var dados = { modo: modo, respostas: respostas };
     if (modo === 'vendedor') dados.token = token;
     else {
