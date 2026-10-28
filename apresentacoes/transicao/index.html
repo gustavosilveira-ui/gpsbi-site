@@ -496,7 +496,7 @@ h2 em { font-style: normal; color: var(--ciano); }
 .slide[aria-label="O Hub Gpsbi na prática"] .topo{gap:13px}
 .slide[aria-label="O Hub Gpsbi na prática"] .hub-demo{zoom:.78;width:128.205%;margin-top:26px;flex:none;align-self:center}
 
-/* V4: sistema editorial de palco / 10:9 */
+/* V4: sistema editorial de palco / 9:9 */
 .slide:not(.capa):not(.fim){padding:70px 104px 106px}
 .slide:not(.capa):not(.fim) .topo{gap:17px}
 .slide:not(.capa):not(.fim) h2{font-size:60px;line-height:1.04;max-width:1350px}
@@ -592,7 +592,6 @@ h2 em { font-style: normal; color: var(--ciano); }
 <!-- 4. Quem é a Gpsbi -->
 <section aria-label="Quem é a Gpsbi" class="slide" data-modo="leve"><div class="topo"><p class="olho r">QUEM É A Gpsbi</p><h2 class="r">Um financeiro que <em>funciona todos os dias.</em></h2></div><div class="v3-service"><div class="v3-service-core"><div class="v3-core-badge">Gpsbi</div><div class="v3-service-icon">↗</div><strong>Organização que vira decisão.</strong><p>Você tem clareza. Nós cuidamos da execução.</p></div><div class="v3-service-list"><div class="v3-service-line"><span>01</span><div><b>Rotina financeira completa</b><small>Contas a pagar, receber e conciliação</small></div><i>↗</i></div><div class="v3-service-line"><span>02</span><div><b>Fluxo de caixa diário</b><small>Visibilidade do presente e próximos compromissos</small></div><i>↗</i></div><div class="v3-service-line"><span>03</span><div><b>Ponte com a contabilidade</b><small>Informações alinhadas com a Patrimonium</small></div><i>↗</i></div><div class="v3-service-line"><span>04</span><div><b>Cobrança de inadimplentes</b><small>Cobrança ativa, quando fizer sentido para você</small></div><i>↗</i></div></div></div><div class="v3-bottomline">Um time para executar. <strong>Um painel para acompanhar.</strong></div></section>
 <!-- 5. O que muda e o que não muda -->
-<section aria-label="O que muda e o que continua igual" class="slide claro" data-modo="leve"><div class="topo"><p class="olho r">NA PRÁTICA</p></div><div class="v3-change"><div class="v3-change-box remain"><div class="v3-change-heading"><span class="v3-round">✓</span><div><small>CONTINUIDADE</small><strong>Você mantém</strong></div></div><div class="v3-change-rows"><div><strong>Mesmo valor de hoje</strong></div><div>Sem aditivo de contrato</div><div>Contabilidade na Patrimonium</div><div>Sua aprovação dos pagamentos</div></div></div><div class="v3-change-switch">→</div><div class="v3-change-box advance"><div class="v3-change-heading"><span class="v3-round">↗</span><div><small>A PARTIR DE 01/12</small><strong>O que muda</strong></div></div><div class="v3-change-rows"><div>Gpsbi assume a rotina financeira</div><div>Mensalidade cobrada pela Gpsbi</div><div>WhatsApp e e-mail exclusivos da sua empresa</div></div></div></div></section>
 <!-- 5b. Segurança -->
 <section aria-label="Segurança da operação" class="slide" data-modo="leve"><div class="topo"><p class="olho r">O SEU GANHO</p><h2 class="r">Segurança <em>e tranquilidade.</em></h2></div><div class="v3-safety"><div class="v3-safety-art"><div class="v3-safety-ring"><div class="v3-safety-shield">✓</div></div><div class="v3-safety-word">CADA UM NO QUE FAZ DE MELHOR</div></div><div class="v3-safety-points"><div><span>01</span><strong>Gpsbi 100% focada no seu financeiro</strong></div><div><span>02</span><strong>Patrimonium 100% focada na sua contabilidade</strong></div><div><span>03</span><strong>Caixa acompanhado todo dia útil</strong></div><div><span>04</span><strong>Transição assistida, sem lançamento descoberto</strong></div></div></div><div class="v3-bottomline">O ganho dessa união: <strong>cada empresa focada na sua especialidade.</strong></div></section>
 <!-- 6. Perco alguma coisa? -->
@@ -732,7 +731,7 @@ h2 em { font-style: normal; color: var(--ciano); }
   var deck = document.getElementById('deck');
   var stage = document.getElementById('stage');
   function ajusta() {
-    var s = Math.min(window.innerWidth / 1000, (window.innerHeight - 8) / 900);
+    var s = Math.min(window.innerWidth / 900, (window.innerHeight - 8) / 900);
     stage.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
   }
   window.addEventListener('resize', ajusta);
