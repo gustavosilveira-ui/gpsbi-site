@@ -1,5 +1,9 @@
 {
   "rewrites": [
-    { "source": "/parceiros", "destination": "/parceiros.html" }
+    { "source": "/parceiros", "destination": "/parceiros.html" },
+    { "source": "/acordo", "destination": "https://propostas.gpsbi.com.br/acordo" },
+    { "source": "/api/acordo", "destination": "https://propostas.gpsbi.com.br/api/acordo" },
+    { "source": "/api/cnpj", "destination": "https://propostas.gpsbi.com.br/api/cnpj" },
+    { "source": "/assets/:arquivo", "destination": "https://propostas.gpsbi.com.br/assets/:arquivo" }
   ]
 }
