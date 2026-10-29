@@ -424,6 +424,9 @@ section[aria-labelledby="t-fluxo"] .tabela tbody th { white-space: nowrap; }
 .materiais { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px; }
 .material { display: flex; flex-direction: column; gap: 8px; background: var(--papel); border: 1px solid var(--borda); border-radius: var(--raio); padding: 22px; text-decoration: none; color: inherit; }
 .material:hover { border-color: var(--azul); }
+.material-acoes { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.material-acoes .botao { min-height: 40px; padding: 8px 14px; font-size: 14px; }
+.material-abrir { font-size: 14px; font-weight: 700; color: var(--azul); text-decoration: none; margin-left: 4px; }
 .material-botao { font: inherit; text-align: left; cursor: pointer; width: 100%; }
 .material-botao[disabled] { cursor: default; opacity: .85; }
 .material span { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--texto-3); }
@@ -515,6 +518,7 @@ section[aria-labelledby="t-fluxo"] .tabela tbody th { white-space: nowrap; }
       <a class="material" href="/apresentacoes/financeiro/" target="_blank" rel="noopener"><span>Financeiro 360°</span><h3>Apresentação Financeiro</h3><p>Rotina financeira, aprovação de pagamentos, conciliação e demonstração.</p><b>Abrir →</b></a>
       <a class="material" href="/apresentacoes/bi/" target="_blank" rel="noopener"><span>BI e indicadores</span><h3>Apresentação BI</h3><p>Comercial inteligente, DRE, fluxo projetado e indicadores.</p><b>Abrir →</b></a>
       <a class="material" href="https://propostas.gpsbi.com.br/diagnostico" target="_blank" rel="noopener"><span>Para o cliente</span><h3>Diagnóstico</h3><p>O cliente responde sem ver valores e as propostas chegam no e-mail da Gpsbi.</p><b>Abrir →</b></a>
+      <div class="material material-acordo"><span>Antes da demonstração</span><h3>Acordo de confidencialidade</h3><p>O cliente aceita online e libera um usuário só de consulta para a Gpsbi (diagnostico@gpsbi.com.br). Nunca pedimos senha.</p><div class="material-acoes"><button type="button" class="botao botao-pri" data-acordo-copiar data-copiar="https://propostas.gpsbi.com.br/acordo">Copiar link</button><a class="botao botao-sec" data-acordo-whats href="#" target="_blank" rel="noopener">WhatsApp</a><a class="material-abrir" data-acordo-abrir href="https://propostas.gpsbi.com.br/acordo" target="_blank" rel="noopener">Abrir →</a></div></div>
     </div>
   </section>
 
@@ -788,6 +792,11 @@ section[aria-labelledby="t-fluxo"] .tabela tbody th { white-space: nowrap; }
     document.querySelectorAll('a[href^="' + DIAG + '"]').forEach(function (a) { a.href = link; });
     document.querySelectorAll('[data-whats]').forEach(function (a) { a.href = 'https://wa.me/?text=' + encodeURIComponent(msg); });
     document.querySelectorAll('[data-link-texto]').forEach(function (p) { p.textContent = link.replace('https://', ''); });
+    var acordo = 'https://propostas.gpsbi.com.br/acordo' + (cod ? '?p=' + cod : '');
+    var msgAcordo = 'Olá! Para prepararmos a demonstração com os números da sua empresa, leia e aceite o acordo de confidencialidade da Gpsbi. Por ele você libera um usuário só de consulta, sem passar nenhuma senha: ' + acordo;
+    document.querySelectorAll('[data-acordo-copiar]').forEach(function (b) { b.setAttribute('data-copiar', acordo); });
+    document.querySelectorAll('[data-acordo-abrir]').forEach(function (a) { a.href = acordo; });
+    document.querySelectorAll('[data-acordo-whats]').forEach(function (a) { a.href = 'https://wa.me/?text=' + encodeURIComponent(msgAcordo); });
     document.getElementById('entrada').hidden = true;
     document.getElementById('conteudo').hidden = false;
   }
